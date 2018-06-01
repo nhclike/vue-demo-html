@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
+
+</head>
+<body>
+<div id="app">
+	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+		<el-button @click="addDomain">增加法院</el-button>
+
+		<ul>
+			<li  v-for="(item,index) in ruleForm.courts">
+				<span>{{index}}</span>
+				<span>{{item}}</span>
+				<el-row :gutter="20">
+					<el-col :span="10">
+						<el-form-item :label="'法院'+index"
+													:key="item.key"
+													:prop="'courts.' + index + '.courtName.value'"
+													:rules="{
+      required: true, message: '法院不能为空', trigger: 'change'
+    }">
+							<el-select v-model="item.courtName.value" placeholder="法院">
+								<el-option label="张三" value="shanghai"></el-option>
+								<el-option label="李四" value="beijing"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="10">
+
+					</el-col>
+				</el-row>
+				<el-row :gutter="20">
+					<el-col :span="10">
+						<el-form-item label="案件"
+													:key="item.key"
+													:prop="'courts.' + index + '.case.value'"
+													:rules="{
+      required: true, message: '案件不能为空', trigger: 'change'
+    }">
+							<el-select v-model="item.case.value" placeholder="案件">
+								<el-option label="张三" value="shanghai"></el-option>
+								<el-option label="李四" value="beijing"></el-option>
+							</el-select>
+						</el-form-item>
+          </el-col>
+					<el-col :span="5">
+
+						<el-form-item label="设备"
+													:key="item.key"
+													:prop="'courts.' + index + '.device.value'"
+													:rules="{
+      required: true, message: '设备不能为空', trigger: 'change'
+    }">
+							<el-select v-model="item.device.value" placeholder="设备">
+								<el-option label="张三" value="shanghai"></el-option>
+								<el-option label="李四" value="beijing"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+
+					<el-col :span="5">
+						<el-form-item label="执行人"
+													:key="item.executeMember.key"
+													:prop="'courts.' + index + '.executeMember.value'"
+													:rules="{
+      required: true, message: '执行人不能为空', trigger: 'change'
+    }">
+							<el-select v-model="item.executeMember.value" placeholder="执行人">
+								<el-option label="张三" value="shanghai"></el-option>
+								<el-option label="李四" value="beijing"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</li>
+		</ul>
+
+
+
+		<el-form-item label="被执行人" prop="executeMember">
+			<el-select v-model="ruleForm.executeMember" placeholder="被执行人">
+				<el-option label="张三" value="shanghai"></el-option>
+				<el-option label="李四" value="beijing"></el-option>
+			</el-select>
+		</el-form-item>
+
+
+		<el-form-item label="发起时间" prop="startTime">
+			<el-date-picker
+				v-model="ruleForm.startTime"
+				type="datetime"
+				placeholder="选择日期时间">
+			</el-date-picker>
+		</el-form-item>
+
+
+		<el-form-item label="描述" prop="desc">
+			<el-input type="textarea" v-model="ruleForm.desc"></el-input>
+		</el-form-item>
+
+		<el-form-item>
+			<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+			<el-button @click="resetForm('ruleForm')">重置</el-button>
+		</el-form-item>
+	</el-form>
+</div>
+
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/element-ui/lib/index.js"></script>
+<script>
+	var app=new Vue({
+		el:'#app',
+		data:{
+      ruleForm: {
+        courts: [
+          {
+						courtName: {
+							value: '',
+							key:''
+						},
+						case:{
+							value: '',
+							key:''
+						},
+						device:{
+							value: '',
+							key:''
+						},
+						executeMember:{
+							value: '',
+							key:''
+						}
+        	}
+        ],
+				executeMember: '',
+        startTime:'',
+        desc: ''
+      },
+      rules: {
+        executeMember: [
+          {required: true, message: '请选择被执行人', trigger: 'change'}
+        ],
+        startTime: [
+          {required: true, message: '请选择发起时间', trigger: 'change'}
+        ],
+
+        desc: [
+          {required: true, message: '请填写执行描述', trigger: 'blur'}
+        ]
+
+      }
+		},
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log(this.ruleForm);
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+      addDomain(){
+        this.ruleForm.courts.push({
+          courtName: {
+            value: '',
+            key: Date.now()+'courtName'
+
+          },
+          case:{
+            value: '',
+            key: Date.now()+'case'
+
+          },
+          device:{
+            value: '',
+            key: Date.now()+'device'
+          },
+          executeMember:{
+            value: '',
+						key: Date.now()+'executeMember'
+          }
+        });
+
+			}
+    }
+	})
+</script>
+</body>
+</html>
